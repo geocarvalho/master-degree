@@ -13,23 +13,32 @@
 library(minfi)
 library(GEOquery)
 
-# Download idat
-getGEOSuppFiles("GSE72245")
-untar("GSE72245/GSE72245_RAW.tar", exdir = "GSE72245/idat")
-head(list.files("GSE72245/idat", pattern = "idat"))
+samples <- c("GSE72245", "GSE72251", "GSE72254")
+for (sample in samples) {
+    # Download idat
+    getGEOSuppFiles(sample)
 
-idatFiles <- list.files("GSE72245/idat", pattern = "idat.gz$", full = TRUE)
-sapply(idatFiles, gunzip, overwrite = TRUE)
+    raw <- paste(sample, "/", sample, "_RAW.tar", sep="")
+    idat_file <- paste(sample, "/", "idat", sep="")
 
-rgSet <- read.metharray.exp("GSE72245/idat")
-gc()
-grSet <- preprocessQuantile(rgSet)
+    untar(raw, exdir = idat_file)
+    head(list.files(idat_file, pattern = "idat"))
 
-# Download beta-values
-beta <- getBeta(grSet)
-write.csv(file="GSE72245/GSE72245_bvalues.csv", x=beta)
+    idatFiles <- list.files(idat_file, pattern = "idat.gz$", full = TRUE)
+    sapply(idatFiles, gunzip, overwrite = TRUE)
 
-# Download phenotype data
-geoMat <- getGEO("GSE72245")
-pD.all <- pData(geoMat[[1]])
-write.csv(file="GSE72245/GSE72245_all_phenotype.csv", x=pD.all)
+    rgSet <- read.metharray.exp(idat_file)
+    gc()
+    grSet <- preprocessQuantile(rgSet)
+
+    # Download beta-values
+    bvalues <- paste(sample, "/", sample, "_bvalues.csv", sep="")
+    beta <- getBeta(grSet)
+    write.csv(file=bvalues, x=beta)
+
+    # Download phenotype data
+    pheno <- paste(sample, "/", sample, "_all_phenotype.csv", sep="")
+    geoMat <- getGEO(sample)
+    pD.all <- pData(geoMat[[1]])
+    write.csv(file=pheno, x=pD.all)
+}
