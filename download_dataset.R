@@ -1,29 +1,35 @@
 # https://kasperdanielhansen.github.io/genbioconductor/html/minfi.html
 # examples from https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE72308
 
+# Packages needed
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+
+# BiocManager::install("minfi")
+# BiocManager::install("GEOquery")
+# BiocManager::install("IlluminaHumanMethylation450kmanifest")
+# BiocManager::install("IlluminaHumanMethylation450kanno.ilmn12.hg19")
+
 library(minfi)
 library(GEOquery)
 
 # Download idat
-# getGEOSuppFiles("/home/george/Documents/Mestrado/projeto/GEO/GSE72251")
-# untar("/home/george/Documents/Mestrado/projeto/GEO/GSE72251/GSE72251_RAW.tar", exdir = "/home/george/Documents/Mestrado/projeto/GEO/GSE72251/idat")
-# head(list.files("/home/george/Documents/Mestrado/projeto/GEO/GSE72251/idat", pattern = "idat"))
+getGEOSuppFiles("GSE72245")
+untar("GSE72245/GSE72245_RAW.tar", exdir = "GSE72245/idat")
+head(list.files("GSE72245/idat", pattern = "idat"))
 
-# idatFiles <- list.files("/home/george/Documents/Mestrado/projeto/GEO/GSE72251/idat", pattern = "idat.gz$", full = TRUE)
-# sapply(idatFiles, gunzip, overwrite = TRUE)
+idatFiles <- list.files("GSE72245/idat", pattern = "idat.gz$", full = TRUE)
+sapply(idatFiles, gunzip, overwrite = TRUE)
 
-# Download phenotype data
-# geoMat <- getGEO("GSE72251")
-# pD.all <- pData(geoMat[[1]])
-# write.csv(file="/home/george/Documents/Mestrado/projeto/GEO/GSE72251/GSE72251_all_phenotype.csv", x=pD.all, row.names=FALSE)
-# pD <- pD.all[, c("title", "geo_accession", "characteristics_ch1.1", "characteristics_ch1.2")]
-# head(pD)
-
-# Open dataset
-rgSet <- read.metharray.exp("/home/george/Documents/Mestrado/projeto/GEO/GSE72251/idat")
-
-# Preprocess
+rgSet <- read.metharray.exp("GSE72245/idat")
 gc()
 grSet <- preprocessQuantile(rgSet)
-getBeta(grSet)
 
+# Download beta-values
+beta <- getBeta(grSet)
+write.csv(file="GSE72245/GSE72245_bvalues.csv", x=beta)
+
+# Download phenotype data
+geoMat <- getGEO("GSE72245")
+pD.all <- pData(geoMat[[1]])
+write.csv(file="GSE72245/GSE72245_all_phenotype.csv", x=pD.all)
