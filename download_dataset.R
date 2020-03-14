@@ -13,7 +13,12 @@
 library(minfi)
 library(GEOquery)
 
-samples <- c("GSE72245", "GSE72251", "GSE72254")
+# Breast cancer datasets
+# samples <- c("GSE72245", "GSE72251", "GSE72254")
+
+# Age example datasets
+samples <- c("GSE51032", "GSE42861", "GSE87571")
+
 for (sample in samples) {
     # Download idat
     getGEOSuppFiles(sample)
