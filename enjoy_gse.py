@@ -1,8 +1,11 @@
 import pandas as pd
 import seaborn as sns
+import xgboost as xgb
 import matplotlib.pyplot as plt
+from sklearn.svm import LinearSVC
 from sklearn.pipeline import Pipeline
 from sklearn.decomposition import PCA
+from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
@@ -94,13 +97,32 @@ plt.xticks(rotation='vertical')
 # CPU times: user 29min 11s, sys: 5min 22s, total: 34min 34s
 # Wall time: 3min 17s
 
-%%time
-
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.neural_network import MLPClassifier
-
+# %%time
 pl_mlp = Pipeline(steps=[('scaler',StandardScaler()),
                              ('mlp_ann', MLPClassifier(hidden_layer_sizes=(1275, 637)))])
 scores = cross_val_score(pl_mlp, gse_pheno_df, subtype, cv=10,scoring='accuracy')
 print('Accuracy for ANN : ', scores.mean())
+
+# Accuracy for ANN :  0.5613636363636364
+# CPU times: user 4h 47min 35s, sys: 7h 21min 40s, total: 12h 9min 15s
+# Wall time: 6h 3min 10s
+
+# %%time
+pl_svm = Pipeline(steps=[('scaler',StandardScaler()),
+                             ('pl_svm', LinearSVC())])
+scores = cross_val_score(pl_svm, gse_pheno_df, subtype, cv=10,scoring='accuracy')
+print('Accuracy for Linear SVM : ', scores.mean())
+
+# Accuracy for Linear SVM :  0.6098484848484848
+# CPU times: user 5min 16s, sys: 15.9 s, total: 5min 32s
+# Wall time: 4min 11s
+
+# %%time
+pl_xgb = Pipeline(steps=
+                  [('xgboost', xgb.XGBClassifier(objective='multi:softmax'))])
+scores = cross_val_score(pl_xgb, gse_pheno_df, subtype, cv=10)
+print('Accuracy for XGBoost Classifier : ', scores.mean())
+
+# Accuracy for XGBoost Classifier :  0.6787878787878789
+# CPU times: user 15h 57min 11s, sys: 1h 15min 57s, total: 17h 13min 8s
+# Wall time: 23min 59s
