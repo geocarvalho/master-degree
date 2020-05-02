@@ -1,7 +1,8 @@
 import pandas as pd
-import seaborn as sns
+import numpy as np
+# import seaborn as sns
 import xgboost as xgb
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from sklearn.svm import LinearSVC
 from sklearn.pipeline import Pipeline
 from sklearn.decomposition import PCA
@@ -11,26 +12,50 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score, train_test_split
 
+def prepare_df(gse, pheno):
+    """ Merge GSE and phenotype files into a DataFrame
+    """
+    # GSE
+    gse_df = pd.read_csv(gse, index_col=0, header=None).T
+    gse_df = gse_df.rename(columns={np.NaN: "samples"})
+    gse_df["geo_accession"] = gse_df["samples"].apply(lambda lst: lst.split("_")[0])
+    
+    # phenotype
+    pheno_df = pd.read_csv(pheno)
+    pheno_df = pheno_df.rename({
+        "Unnamed: 0": "samples", "subtype_ihc:ch1": "subtype"
+        }, axis=1)
+
+    l_pheno_df = pheno_df[["geo_accession", "subtype"]]
+    gse_pheno_df = gse_df.merge(l_pheno_df, on="geo_accession")
+    gse_pheno_df.drop(["geo_accession", "samples"], axis=1, inplace=True)
+
+    return gse_pheno_df
+
+
 # Organize dataset
-gse_file = "/home/genomika/george/master-degree/GSE72245/GSE72245_bvalues.csv"
-gse_df = pd.read_csv(gse_file, index_col=0, header=None).T.reset_index()
-gse_df = gse_df.rename({"index": "samples"}, axis=1)
-gse_df["geo_accession"] = gse_df["samples"].apply(lambda lst: lst.split("_")[0])
+gse_file1 = "/home/genomika/george/master-degree/GSE72245/GSE72245_bvalues.csv"
+pheno1 = "/home/genomika/george/master-degree/GSE72245/GSE72245_all_phenotype.csv"
+gse_pheno_df1 = prepare_df(gse_file1, pheno1)
 
-pheno = "/home/genomika/george/master-degree/GSE72245/GSE72245_all_phenotype.csv"
-pheno_df = pd.read_csv(pheno)
-pheno_df = pheno_df.rename({
-    "Unnamed: 0": "samples", "subtype_ihc:ch1": "subtype"
-    }, axis=1)
+gse_file2 = "/home/genomika/george/master-degree/GSE72251/GSE72251_bvalues.csv"
+pheno2 = "/home/genomika/george/master-degree/GSE72251/GSE72251_all_phenotype.csv"
+gse_pheno_df2 = prepare_df(gse_file2, pheno2)
 
-l_pheno_df = pheno_df[["geo_accession", "subtype"]]
-gse_pheno_df = gse_df.merge(l_pheno_df, on="geo_accession")
-gse_pheno_df.drop(["geo_accession", "samples"], axis=1, inplace=True)
+# gse_file3 = "/home/genomika/george/master-degree/GSE72254/GSE72254_bvalues.csv"
+# pheno3 = "/home/genomika/george/master-degree/GSE72254/GSE72254_all_phenotype.csv"
+# gse_pheno_df3 = prepare_df(gse_file3, pheno3)
+
+# Concatenate DFs
+gse_pheno_df = pd.concat([gse_pheno_df1, gse_pheno_df2], sort=False).reset_index(drop=True) 
+
 gse_pheno_df["subtype"] = gse_pheno_df["subtype"].map({
     "LumB":1, "Basal":2, "HER2":3, "LumA":4
     })
 subtype = gse_pheno_df["subtype"]
 gse_pheno_df.drop("subtype", axis=1, inplace=True)
+
+# TODO: PROBLEM WITH NAN values
 
 # Plot subtype distribution
 # plt.figure(figsize=(12,5))
