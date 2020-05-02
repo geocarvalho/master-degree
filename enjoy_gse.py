@@ -96,12 +96,12 @@ pca_vectors = pca.fit_transform(scaled_df)
 for index, var in enumerate(pca.explained_variance_ratio_):
     print("Explained Variance ratio by Principal Component ", (index+1), " : ", var)
 # Scatter plot from the 20 components
-plt.figure(figsize=(25,8))
-sns.scatterplot(x=pca_vectors[:, 0], y=pca_vectors[:, 1], hue=subtype)
-plt.title('Principal Components vs Class distribution', fontsize=16)
-plt.ylabel('Principal Component 2', fontsize=16)
-plt.xlabel('Principal Component 1', fontsize=16)
-plt.xticks(rotation='vertical')
+# plt.figure(figsize=(25,8))
+# sns.scatterplot(x=pca_vectors[:, 0], y=pca_vectors[:, 1], hue=subtype)
+# plt.title('Principal Components vs Class distribution', fontsize=16)
+# plt.ylabel('Principal Component 2', fontsize=16)
+# plt.xlabel('Principal Component 1', fontsize=16)
+# plt.xticks(rotation='vertical')
 
 # %%time
 # pl_log_reg_pca = Pipeline(steps=[('scaler',StandardScaler()),
