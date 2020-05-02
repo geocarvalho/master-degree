@@ -37,17 +37,18 @@ def prepare_df(gse, pheno):
 gse_file1 = "/home/genomika/george/master-degree/GSE72245/GSE72245_bvalues.csv"
 pheno1 = "/home/genomika/george/master-degree/GSE72245/GSE72245_all_phenotype.csv"
 gse_pheno_df1 = prepare_df(gse_file1, pheno1)
+gse_pheno_df = gse_pheno_df1
 
-gse_file2 = "/home/genomika/george/master-degree/GSE72251/GSE72251_bvalues.csv"
-pheno2 = "/home/genomika/george/master-degree/GSE72251/GSE72251_all_phenotype.csv"
-gse_pheno_df2 = prepare_df(gse_file2, pheno2)
+# gse_file2 = "/home/genomika/george/master-degree/GSE72251/GSE72251_bvalues.csv"
+# pheno2 = "/home/genomika/george/master-degree/GSE72251/GSE72251_all_phenotype.csv"
+# gse_pheno_df2 = prepare_df(gse_file2, pheno2)
 
 # gse_file3 = "/home/genomika/george/master-degree/GSE72254/GSE72254_bvalues.csv"
 # pheno3 = "/home/genomika/george/master-degree/GSE72254/GSE72254_all_phenotype.csv"
 # gse_pheno_df3 = prepare_df(gse_file3, pheno3)
 
 # Concatenate DFs
-gse_pheno_df = pd.concat([gse_pheno_df1, gse_pheno_df2], sort=False).reset_index(drop=True) 
+# gse_pheno_df = pd.concat([gse_pheno_df1, gse_pheno_df2], sort=False).reset_index(drop=True) 
 
 gse_pheno_df["subtype"] = gse_pheno_df["subtype"].map({
     "LumB":1, "Basal":2, "HER2":3, "LumA":4
