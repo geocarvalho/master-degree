@@ -32,29 +32,32 @@ def prepare_df(gse, pheno):
 
     return gse_pheno_df
 
-
 # Organize dataset
 gse_file1 = "/home/genomika/george/master-degree/GSE72245/GSE72245_bvalues.csv"
 pheno1 = "/home/genomika/george/master-degree/GSE72245/GSE72245_all_phenotype.csv"
 gse_pheno_df1 = prepare_df(gse_file1, pheno1)
-gse_pheno_df = gse_pheno_df1
 
-# gse_file2 = "/home/genomika/george/master-degree/GSE72251/GSE72251_bvalues.csv"
-# pheno2 = "/home/genomika/george/master-degree/GSE72251/GSE72251_all_phenotype.csv"
-# gse_pheno_df2 = prepare_df(gse_file2, pheno2)
+gse_file2 = "/home/genomika/george/master-degree/GSE72251/GSE72251_bvalues.csv"
+pheno2 = "/home/genomika/george/master-degree/GSE72251/GSE72251_all_phenotype.csv"
+gse_pheno_df2 = prepare_df(gse_file2, pheno2)
 
 # gse_file3 = "/home/genomika/george/master-degree/GSE72254/GSE72254_bvalues.csv"
 # pheno3 = "/home/genomika/george/master-degree/GSE72254/GSE72254_all_phenotype.csv"
 # gse_pheno_df3 = prepare_df(gse_file3, pheno3)
 
 # Concatenate DFs
-# gse_pheno_df = pd.concat([gse_pheno_df1, gse_pheno_df2], sort=False).reset_index(drop=True) 
+gse_pheno_df = pd.concat([gse_pheno_df1, gse_pheno_df2], sort=False).reset_index(drop=True) 
 
 gse_pheno_df["subtype"] = gse_pheno_df["subtype"].map({
     "LumB":1, "Basal":2, "HER2":3, "LumA":4
     })
 subtype = gse_pheno_df["subtype"]
 gse_pheno_df.drop("subtype", axis=1, inplace=True)
+subtype.drop(subtype.index[[141, 216]], inplace=True)
+gse_pheno_df.drop(gse_pheno_df.index[[141, 216]], inplace=True)
+
+for col in gse_pheno_df.columns:
+    gse_pheno_df[col] = gse_pheno_df[col].astype('float64')
 
 # TODO: PROBLEM WITH NAN values
 
@@ -74,9 +77,13 @@ pl_random_forest = Pipeline(steps=[('random_forest', RandomForestClassifier())])
 scores = cross_val_score(pl_random_forest, gse_pheno_df, subtype, cv=10,scoring='accuracy')
 print('Accuracy for RandomForest : ', scores.mean())
 
-# Accuracy for RandomForest :  0.6636363636363637
-# CPU times: user 25.2 s, sys: 28.9 s, total: 54.2 s
-# Wall time: 54.3 s
+# Dataset 1
+# Accuracy for RandomForest :  0.5681818181818181
+# CPU times: user 1min 2s, sys: 3.61 s, total: 1min 6s
+# Wall time: 1min 6s
+
+# Both datasets
+# Accuracy for RandomForest :  0.7153985507246376
 
 # Run LR
 # %%time
@@ -85,9 +92,10 @@ pl_log_reg = Pipeline(steps=[('scaler',StandardScaler()),
 scores = cross_val_score(pl_log_reg, gse_pheno_df, subtype, cv=10,scoring='accuracy')
 print('Accuracy for Logistic Regression: ', scores.mean())
 
+# Dataset1
 # Accuracy for Logistic Regression:  0.5840909090909091
-# CPU times: user 51min 29s, sys: 1min 49s, total: 53min 18s
-# Wall time: 52min 11s
+# CPU times: user 55min 14s, sys: 1min 7s, total: 56min 21s
+# Wall time: 55min 1s
 
 scaler = StandardScaler()
 scaled_df = scaler.fit_transform(gse_pheno_df)
@@ -139,9 +147,10 @@ pl_svm = Pipeline(steps=[('scaler',StandardScaler()),
 scores = cross_val_score(pl_svm, gse_pheno_df, subtype, cv=10,scoring='accuracy')
 print('Accuracy for Linear SVM : ', scores.mean())
 
+# Dataset 1
 # Accuracy for Linear SVM :  0.6098484848484848
-# CPU times: user 5min 16s, sys: 15.9 s, total: 5min 32s
-# Wall time: 4min 11s
+# CPU times: user 6min 6s, sys: 16.9 s, total: 6min 23s
+# Wall time: 4min 55s
 
 # %%time
 pl_xgb = Pipeline(steps=
