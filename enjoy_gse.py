@@ -56,11 +56,11 @@ gse_pheno_df.drop("subtype", axis=1, inplace=True)
 subtype.drop(subtype.index[[141, 216]], inplace=True)
 gse_pheno_df.drop(gse_pheno_df.index[[141, 216]], inplace=True)
 
-for col in gse_pheno_df.columns:
-    gse_pheno_df[col] = gse_pheno_df[col].astype('float64')
+gse_pheno_df = gse_pheno_df.astype(float)
+subtype = subtype.astype(float)
 
 # TODO: PROBLEM WITH NAN values
-
+subtype
 # Plot subtype distribution
 # plt.figure(figsize=(12,5))
 # sns.countplot(x=subtype, color='mediumseagreen')
@@ -83,7 +83,7 @@ print('Accuracy for RandomForest : ', scores.mean())
 # Wall time: 1min 6s
 
 # Both datasets
-# Accuracy for RandomForest :  0.7153985507246376
+# Accuracy for RandomForest :  0.6855072463768116
 
 # Run LR
 # %%time
@@ -96,6 +96,9 @@ print('Accuracy for Logistic Regression: ', scores.mean())
 # Accuracy for Logistic Regression:  0.5840909090909091
 # CPU times: user 55min 14s, sys: 1min 7s, total: 56min 21s
 # Wall time: 55min 1s
+
+# Both datasets
+# Accuracy for Logistic Regression:  0.6942028985507247
 
 scaler = StandardScaler()
 scaled_df = scaler.fit_transform(gse_pheno_df)
@@ -161,3 +164,6 @@ print('Accuracy for XGBoost Classifier : ', scores.mean())
 # Accuracy for XGBoost Classifier :  0.6787878787878789
 # CPU times: user 15h 57min 11s, sys: 1h 15min 57s, total: 17h 13min 8s
 # Wall time: 23min 59s
+
+# Both datasets
+# Accuracy for XG Boost Classifier :  0.7416666666666667
