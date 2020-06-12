@@ -12,6 +12,14 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score, train_test_split
 
+def threshold_bvalue(value):
+    if float(value) <= 0.2:
+        return "low"
+    elif float(value) >=0.8:
+        return "high"
+    else:
+        return "middle"
+
 def prepare_df(gse, pheno):
     """ Merge GSE and phenotype files into a DataFrame
     """
@@ -19,6 +27,10 @@ def prepare_df(gse, pheno):
     gse_df = pd.read_csv(gse, index_col=0, header=None).T
     gse_df = gse_df.rename(columns={np.NaN: "samples"})
     gse_df["geo_accession"] = gse_df["samples"].apply(lambda lst: lst.split("_")[0])
+
+    # Transform b-values in methylation rate groups
+    cols = [col for col in gse_df.columns if col.startswith("cg")]
+    gse_df[cols] = gse_df[cols].applymap(threshold_bvalue)
     
     # phenotype
     pheno_df = pd.read_csv(pheno)
@@ -51,6 +63,8 @@ gse_pheno_df = pd.concat([gse_pheno_df1, gse_pheno_df2], sort=False).reset_index
 gse_pheno_df["subtype"] = gse_pheno_df["subtype"].map({
     "LumB":1, "Basal":2, "HER2":3, "LumA":4
     })
+
+
 subtype = gse_pheno_df["subtype"]
 gse_pheno_df.drop("subtype", axis=1, inplace=True)
 subtype.drop(subtype.index[[141, 216]], inplace=True)
