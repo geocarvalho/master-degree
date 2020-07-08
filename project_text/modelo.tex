@@ -1,0 +1,103 @@
+% Modelo de relatório no estilo artigo em duas colunas
+%\documentclass[twocolumn]{article}
+\documentclass{article}
+
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{subcaption}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{authblk}
+\usepackage{todonotes}
+\usepackage[colorlinks,citecolor=red,urlcolor=blue,bookmarks=false,hypertexnames=true]{hyperref}
+
+\newcommand{\eqname}[1]{\tag*{#1}}% Tag equation with name
+\usepackage{multicol}
+\usepackage{geometry}
+% Tamanho das margens:
+\geometry{
+	a4paper,
+	total={170mm,257mm},
+	left=30mm,
+	right=20mm,
+	top=20mm,
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliografia estilo ABNT. Se não tiver instalado, comente a linha abaixo.
+\usepackage[alf, abnt-etal-list=0, abnt-emphasize=bf,abnt-last-names=bibtex, abnt-etal-text=it, abnt-etal-cite=2]{abntex2cite}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Dados de identificação
+\title{Subgroup mining applied to DNA methylation datasets}
+\author{George Carvalho, André Câmara, Ricardo Prudêncio}
+\affil{Universidade Federal de Pernambuco}
+
+\begin{document}
+
+\maketitle        
+
+% Resumo de no máximo 200 palavras
+\begin{abstract}
+
+\color{black}
+\end{abstract}
+
+\section{Objetivo}
+
+Dado um grupo de individíduos e atributos atrelados a esses indivíduos, estamos interessados em encontrar subgrupos populacionais que são estatisticamente mais interessantes \cite{wen2017cell,park2019finding}. Sendo os indivíduos pacientes com dados de metilação de DNA e suas propriedades os dados de expressão de metilação (variável continua) queremos encontrar subgrupos nesses dados que tenham alguma característica intrínseca e não necessariamente explícita que sejam estatísticamente significante. Fazendo isso é possível indicar possíveis biomarcadores para subgrupos específicos em uma população \cite{wen2017cell}.
+
+\section{Metodologia}
+
+Uma alternativa é classificar os dados de expressão de metilação em mais expresso ou menos expresso (binarizar) \cite{wang2019biomethyl, cedoz2018methylmix} para então encontrar subgrupos por meio \textit{subgroup mining}.
+
+\begin{itemize}
+    \item Coleta de dados
+    \item Binarização dos dados de metilação. Ver como vai fazer isso (consensus?).
+    
+    \item Tratamento do atributo alvo (qual atributo e se vai ser binario, multiclasse ou contínuo)
+    
+    \item Descoberta de padroes
+    \begin{enumerate}
+        \item Opcao 1: aplicar diretamente o metodo de Tarcicio
+        \item Opcao 2: Aplicar clustering seguido de aprendizagem de regras por cluster
+    \end{enumerate}
+\end{itemize}
+
+\subsection{Processamento dos dados}
+
+Baseado no estudo de \cite{jeschke2017cancers} foram selecionados dois datasets, GSE72245 e GSE72251 disponibilizados no GEO datasets, cada um contendo 118 e 119 amostras tumorais de cancêr de mama respectivamente. Cada paciente tem um subtipo molecular de câncer de mama: luminal A, luminal B, HER2 e basal-like. Esses subtipos estão associados ao prognóstico do paciente e é a nossa classe alvo em uma primeira análise.
+
+O download dos dados foi feito usando a biblioteca GEOquery do Bioconductor, além disso foi feita uma filtragem de qualidade usando a biblioteca Minfi também do Bioconductor. Foram removidos CpGs com baixa qualidade de sinal e após essa primeira filtragem foi feita uma normalização por subconjunto de quartil dos dados visando minimizar variações entre amostras. Outro filtro foi a remoção de probes de baixa qualidade em pelo menos uma amostra, além de probes com SNPs comuns que podem afetar CpGs e probes que são conhecidas por alinhar em  múltiplas regiões do genoma que também foram removidas.
+
+Após a filtragem, os valores beta de cada região foram obtidos usando a biblioteca Minfi. Como os valores beta ficam entre 0 e 1, eles foram categorizados em low (<=0.2), middle (>0.2, <0.8) e high (>=0.8), de acordo com o estudo de \cite{du2010beta} para serem usados como classe alvo no algoritmo de subgroup discovery ou de clustering.
+
+
+
+\section{Formalização}
+
+
+% Dado um banco de dados $D = (I, A)$ contendo indivíduos $I$ e seus atributos $A$, cada exemplo em $D,I = {a_1, ..., a_m}$ é um conjunto de valores correspondente aos atributos $A_1, ..., A_m$. A
+
+Seja $\mathcal{D}$ um conjunto de $n$ indivíduos, descrito por um conjunto de $m$ atributos $ \mathcal{A} = \{A_1, ..., A_m\}$. Cada indivíduo $d_i \in \mathcal{D}$ é representado pelo vetor $\vec{a_i} = (a_{i1},\dots,a_{1m})$, onde $a_{1j} =  A_j(d_i)$. Um {\it subgrupo} é definido por um subconjunto de indivíduos em $\mathcal{D}$, representados por um subconjunto de atributos em $\mathcal{A}$ com valores em comum. A representação dos indivíduos de um subgrupo é chamada de {\it perfil}.  
+
+
+Formalmente, um perfil $P_k$ é dado por um subconjunto de atributos $\mathcal{A}_k \subset \matcal{A}$ e uma conjunção de predicados com valores associados a esses atributos: $\bigwedge\limits_{A_j \in \mathcal{A}_k} (A_j = v_{kj})$. O subgrupo $S_{k}:=\{d_i \in \mathcal{D} | \forall A_j \in \mathcal{A}_k,  a_{ij} = v_{kj}\}$ é então o conjunto de todos os indivíduos com valores de atributos definidos pelo perfil $P_k$ \cite{park2019finding}. \textcolor{red}{DAR UM EXEMPLO}
+
+%o i-ésimo valor de atributo do predicado, por exemplo sexo = "mulher", estilo = "fumante" e doença = "câncer". Um subgrupo $S_X:=\{I \in D | X(I)= true\}$ é o conjunto de todos os indivíduos que possuem o perfil $X$ \cite{park2019finding}.
+
+Além disso é preciso selecionar um ou mais critérios (função de qualidade) para caracterizar o quanto determinado subgrupo é significativo naquela população. Algumas medidas comumentemente usadas é o tamanho do subgrupo e a média da variável de interesse no subgrupo \cite{park2019finding}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% BIBLIOGRAFIA 
+% Estilo de bibliografia ABNT. Se não tiver instalado, mude para plain ou ieeetr
+
+%\bibliographystyle{plain} % Inclua isso se não tiver ABNTEX instalado
+\newpage
+\bibliography{refs}
+%\begin{thebibliography}{refs}
+%\bibitem{}
+
+%\end{thebibliography}
+\end{document}
