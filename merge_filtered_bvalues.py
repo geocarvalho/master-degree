@@ -16,8 +16,8 @@ def prepare_df(gse_df, pheno):
     gse_df["geo_accession"] = gse_df["samples"].apply(lambda lst: lst.split("_")[0])
 
     # Transform b-values in methylation rate groups
-    cols = [col for col in gse_df.columns if col.startswith("cg")]
-    gse_df[cols] = gse_df[cols].applymap(threshold_bvalue)
+    # cols = [col for col in gse_df.columns if col not in ["samples", "geo_accession"]]
+    # gse_df[cols] = gse_df[cols].applymap(threshold_bvalue)
     
     # phenotype
     pheno_df = pd.read_csv(pheno)
@@ -34,9 +34,11 @@ def prepare_df(gse_df, pheno):
 # Open datasets
 gse1 = "GSE72245/GSE72245_filtered_bvalues.csv"
 pheno1 = "GSE72245/GSE72245_all_phenotype.csv"
+# (118, 410510)
 
 gse2 = "GSE72251/GSE72251_filtered_bvalues.csv"
 pheno2 = "GSE72251/GSE72251_all_phenotype.csv"
+# (119, 428735)
 # gse3 = "GSE72254/GSE72254_filtered_bvalues.csv"
 
 gse1_df = pd.read_csv(gse1, index_col=0, header=None).transpose()
@@ -46,7 +48,8 @@ gse2_df = pd.read_csv(gse2, index_col=0, header=None).transpose()
 gse1_df.rename(columns={np.NaN: "samples"}, inplace=True)
 gse2_df.rename(columns={np.NaN: "samples"}, inplace=True)
 
-comm_cpgs = ["samples"] + list(set(list(gse1_df_trans.columns)).intersection(list(gse2_df_trans.columns)))
+comm_cpgs = list(set(list(gse1_df.columns)).intersection(list(gse2_df.columns)))
+# 409355
 
 gse1_df_filtered = gse1_df[comm_cpgs]
 gse_pheno_df1 = prepare_df(gse1_df_filtered, pheno1)
@@ -56,3 +59,15 @@ gse_pheno_df2 = prepare_df(gse2_df_filtered, pheno2)
 
 # Concatenate DFs
 gse_pheno_df = pd.concat([gse_pheno_df1, gse_pheno_df2], sort=False).reset_index(drop=True) 
+
+# Remove rows with subtype equals NaN
+# gse_pheno_df[gse_pheno_df["subtype"].isnull()]
+# rows 141 and 216
+gse_pheno_df.drop(index=[141, 216],inplace=True)
+# (235, 409354)
+
+# Create dataframe with low, middle and high values
+cols = [col for col in df.columns if col != "subtype"]
+gse_pheno_df[gse_pheno_df[cols] <= 0.2] = 0
+gse_pheno_df[gse_pheno_df[cols] >= 0.8] = 2
+gse_pheno_df[(gse_pheno_df[cols] > 0.2) & (gse_pheno_df[cols] < 0.8)] = 1
