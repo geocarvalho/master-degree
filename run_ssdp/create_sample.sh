@@ -1,0 +1,5 @@
+head -1 GSE72245_GSE72251_merged_filtered_category_subtype.csv > GSE72245_GSE72251_sample.csv
+grep LumA GSE72245_GSE72251_merged_filtered_category_subtype.csv >> GSE72245_GSE72251_sample.csv
+grep LumB GSE72245_GSE72251_merged_filtered_category_subtype.csv >> GSE72245_GSE72251_sample.csv
+grep HER2 GSE72245_GSE72251_merged_filtered_category_subtype.csv >> GSE72245_GSE72251_sample.csv
+grep Basal GSE72245_GSE72251_merged_filtered_category_subtype.csv >> GSE72245_GSE72251_sample.csv

@@ -1,0 +1,4 @@
+time java -jar -Xmx30G -Xms30G /home/genomika/george/ssdp_plus/out/artifacts/ssdp_plus_jar/ssdp_plus.jar /home/genomika/george/master-degree/output/GSE72245_GSE72251_sample.csv 5 0.9 HER2 | tee > HER2_result.log
+time java -jar -Xmx30G -Xms30G /home/genomika/george/ssdp_plus/out/artifacts/ssdp_plus_jar/ssdp_plus.jar /home/genomika/george/master-degree/output/GSE72245_GSE72251_sample.csv 5 0.9 Basal | tee > Basal_result.log
+time java -jar -Xmx30G -Xms30G /home/genomika/george/ssdp_plus/out/artifacts/ssdp_plus_jar/ssdp_plus.jar /home/genomika/george/master-degree/output/GSE72245_GSE72251_sample.csv 5 0.9 LumA | tee > LumA_result.log
+time java -jar -Xmx30G -Xms30G /home/genomika/george/ssdp_plus/out/artifacts/ssdp_plus_jar/ssdp_plus.jar /home/genomika/george/master-degree/output/GSE72245_GSE72251_sample.csv 5 0.9 LumB | tee > LumB_result.log
