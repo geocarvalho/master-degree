@@ -7,7 +7,7 @@ def jaccard_similarity(list1, list2):
     union = (len(list1) + len(list2)) - intersection
     return float(intersection) / union
 
-json_file = "subgroups_1.json"
+json_file = "subgroups_2.json"
 with open(json_file, "r") as read_file:
     data = json.load(read_file)
 
@@ -24,7 +24,7 @@ for similarity in data.keys():
             jac = jaccard_similarity(subgroup_lst, data[similarity][str(second)])
             df[str(second)][subgroup] = jac
 
-writer = pd.ExcelWriter("jaccard_index_subgoups.xlsx",engine='xlsxwriter')   
+writer = pd.ExcelWriter("jaccard_index_sample_subgroups.xlsx",engine='xlsxwriter')   
 for dataframe, sheet in zip(list(dataframes.values()), list(dataframes.keys())):
     dataframe.to_excel(writer, sheet_name=sheet, startrow=0 , startcol=0)   
 writer.save()
