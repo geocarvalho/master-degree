@@ -9,6 +9,13 @@ idat_file <- paste(sample, "/", "idat/major", sep="")
 
 rgSet <- read.metharray.exp(idat_file)
 gc()
+
+# Predict sex
+# MSet <- preprocessRaw(rgSet)
+# RSet <- ratioConvert(MSet, what = "both", keepCN = TRUE)
+# GRset <- mapToGenome(RSet)
+# predictedSex <- getSex(GRset, cutoff = -2)$predictedSex
+
 # grSet <- preprocessQuantile(rgSet)
 
 # Differential methylation analysis
