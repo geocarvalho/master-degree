@@ -2,6 +2,7 @@ library(minfi)
 library(GEOquery)
 library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
 library(IlluminaHumanMethylation450kmanifest)
+library(data.table)
 
 sample <- "GSE109381"
 
@@ -15,6 +16,8 @@ gc()
 # RSet <- ratioConvert(MSet, what = "both", keepCN = TRUE)
 # GRset <- mapToGenome(RSet)
 # predictedSex <- getSex(GRset, cutoff = -2)$predictedSex
+# fwrite(list(predictedSex), "sex_vector.csv")
+
 
 # grSet <- preprocessQuantile(rgSet)
 
