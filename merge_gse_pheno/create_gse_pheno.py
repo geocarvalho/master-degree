@@ -709,6 +709,7 @@ pheno_df["PredictedSmokingStatus"] = pheno_df["PredictedSmokingStatus"].replace(
     "Never Smoker": 3})
 pheno_df = pheno_df[["samples", "sex", "PredictedSmokingStatus"]]
 classes_pheno_df = pheno_df.merge(classes, on="samples")
+classes_pheno_df = classes_pheno_df.set_index("samples")
 # Sex (1=M, 2=F)
 
 # gse
@@ -730,11 +731,11 @@ for gse_df in reader:
     gse_df = gse_df.astype(np.int64)
     gse_df = gse_df.reset_index().rename(columns={"index": "samples"})
     gse_df["samples"] = gse_df["samples"].apply(lambda sample: sample.split("_")[0])
-    # merge
-    merged_df = gse_df.merge(classes_pheno_df, on="samples")
-    merged_df = merged_df.set_index("samples")
-    chunks.append(merged_df)
+    gse_df = gse_df.set_index("samples")
+    chunks.append(gse_df)
     
 # create output
 merge_chunks_df = pd.concat(chunks, axis=1)
-merge_chunks_df.to_csv(output, index=False)
+# merge
+merged_df = merge_chunks_df.merge(classes_pheno_df, left_index=True, right_index=True)
+merged_df.to_csv(output, index=False)
