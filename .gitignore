@@ -37,3 +37,7 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# ignore datasets
+GSE109381/
+download_geo/GSE51032/
