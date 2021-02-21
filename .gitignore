@@ -41,3 +41,4 @@ vignettes/*.pdf
 # ignore datasets
 GSE109381/
 download_geo/GSE51032/
+GSE51032/
