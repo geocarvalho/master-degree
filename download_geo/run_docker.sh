@@ -1,5 +1,5 @@
 # Download dataset
-wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE109nnn/GSE109381/suppl//GSE109381_RAW.tar
+# wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE109nnn/GSE109381/suppl//GSE109381_RAW.tar
 
 # Build and run docker
 docker build -t master-degree/download_geo .
