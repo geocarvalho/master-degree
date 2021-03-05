@@ -7,5 +7,8 @@ WORKDIR /download_geo
 # Install packages
 RUN R -e "install.packages('BiocManager'); library('BiocManager'); BiocManager::install('GEOquery'); BiocManager::install('minfi'); BiocManager::install('IlluminaHumanMethylation450kanno.ilmn12.hg19'); BiocManager::install('IlluminaHumanMethylation450kmanifest')"
 
+# Correct the Blas error
+RUN git clone https://github.com/bmbolstad/preprocessCore.git && cd preprocessCore/ && R CMD INSTALL --configure-args="--disable-threading"
+
 # Open bash
 CMD ["/bin/bash"]
