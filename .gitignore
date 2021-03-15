@@ -44,3 +44,5 @@ download_geo/GSE51032/
 GSE51032/
 download_geo/preprocessCore/config*
 download_geo/preprocessCore/src/*
+download_geo/*.Rda
+download_geo/preprocessCore
