@@ -9,8 +9,8 @@ sample <- "GSE51032"
 # getGEOSuppFiles(sample) # timeout, use download_GSE51032.sh
 
 # Unzip RAW file and idat files
-raw <- paste(sample, "_RAW.tar", sep="")
-idat_file <- paste("idat", sep="")
+raw <- paste(sample, "/", sample, "_RAW.tar", sep="")
+idat_file <- paste(sample, "/idat", sep="")
 untar(raw, exdir = idat_file)
 
 head(list.files(idat_file, pattern = "idat"))
