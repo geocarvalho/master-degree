@@ -22,8 +22,16 @@ cols = ['probes', 'gender', 'cancer_type']
 pheno_df.columns = cols
 pheno_df.set_index("probes", inplace=True)
 pheno_df = pheno_df[(pheno_df["cancer_type"] == "normal") | (pheno_df["cancer_type"] == "C50")]
+# Criar binário da classe alvo
+pheno_df["target"] = pheno_df["cancer_type"].map(
+    {"normal": 0, "C50": 1}
+)
+pheno_df = pheno_df[["gender", "target"]]
 pheno_df = pheno_df.T
 
 merge = pd.concat([df, pheno_df])
 merge = merge.T
 merge.to_csv(output)
+
+# Rodar o SSDP+
+# java -jar -Xmx50G -XX:+UseConcMarkSweepGC ssdp_plus/out/artifacts/ssdp_plus_jar/ssdp_plus.jar /home/watson/george/master-degree/download_geo/GSE51032/GSE51032_bvalues_filtered_pheno.csv 5 0.5 1 | tee a  /home/watson/george/master-degree/create_input_ssdp/log_files/GSE109381_50_log.txt
