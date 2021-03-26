@@ -1,5 +1,27 @@
 import pandas as pd
 
+def class_age(row):
+    """ Create class for age <60 and >=60 """
+    if row["age"] < 60:
+        return 0
+    else:
+        return 1
+    
+def class_diagnosis(row):
+    """ Create class for time_diagnosis <6 and >=6 """
+    if row["time_diagnosis"] < 6:
+        return 0
+    else:
+        return 1
+
+def class_menarche(row):
+    """ Create class for age_menarche <13 and >=13 """
+    if row["age_menarche"] < 13:
+        return 0
+    else:
+        return 1
+
+
 data = "/home/watson/george/master-degree/download_geo/GSE51032/GSE51032_bvalues_filtered.csv"
 output = data.replace(".csv", "_pheno.csv")
 df = pd.read_csv(data)
@@ -14,11 +36,11 @@ df = df.astype(int)
 
 pheno = "/home/watson/george/master-degree/download_geo/GSE51032/GSE51032_all_phenotype_normals.csv"
 pheno_df = pd.read_csv(pheno)
-# cols = ['Unnamed: 0', 'age at menarche:ch1', 'age:ch1', 'gender:ch1', 'time to diagnosis:ch1', 'cancer type (icd-10):ch1']
-cols = ['Unnamed: 0', 'gender:ch1', 'cancer type (icd-10):ch1']
+cols = ['Unnamed: 0', 'age at menarche:ch1', 'age:ch1', 'gender:ch1', 'time to diagnosis:ch1', 'cancer type (icd-10):ch1']
+# cols = ['Unnamed: 0', 'gender:ch1', 'cancer type (icd-10):ch1']
 pheno_df = pheno_df[cols]
-# cols = ['probes', 'age_menarche', 'age', 'gender', 'time_diagnosis', 'cancer_type']
-cols = ['probes', 'gender', 'cancer_type']
+cols = ['probes', 'age_menarche', 'age', 'gender', 'time_diagnosis', 'cancer_type']
+# cols = ['probes', 'gender', 'cancer_type']
 pheno_df.columns = cols
 pheno_df.set_index("probes", inplace=True)
 pheno_df = pheno_df[(pheno_df["cancer_type"] == "normal") | (pheno_df["cancer_type"] == "C50")]
@@ -26,7 +48,13 @@ pheno_df = pheno_df[(pheno_df["cancer_type"] == "normal") | (pheno_df["cancer_ty
 pheno_df["target"] = pheno_df["cancer_type"].map(
     {"normal": 0, "C50": 1}
 )
-pheno_df = pheno_df[["gender", "target"]]
+pheno_df["bin_gender"] = pheno_df["gender"].map(
+    {"F": 0, "M": 1}
+)
+pheno_df["bin_age"] = pheno_df.apply(class_age, axis=1)
+pheno_df["bin_diagnosis"] = pheno_df.apply(class_diagnosis, axis=1)
+pheno_df["bin_menarche"] = pheno_df.apply(class_menarche, axis=1)
+pheno_df = pheno_df[["bin_gender", "bin_age", "bin_diagnosis", "bin_menarche", "target"]]
 pheno_df = pheno_df.T
 
 merge = pd.concat([df, pheno_df])
