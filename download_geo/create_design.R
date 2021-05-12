@@ -13,12 +13,12 @@ names(pD.all)[names(pD.all) == "cancer type (icd-10):ch1"] <- "cancer_type"
 pD.all["cancer_type"][is.na(pD.all["cancer_type"])] <- "normal"
 
 # Select just breast cancer and normal samples in 'cancer type (icd-10):ch1' column
-filtered <- pD.all[pD.all$cancer_type %in% c("normal", "C50"), ]
+filtered <- pD.all[pD.all$cancer_type %in% c("normal", "C18"), ]
 
 # Create the desing matrix
 cancerType <- factor(filtered$cancer_type)
 design <- model.matrix(~cancerType -1)
-colnames(design) <- c("C50", "normal")
+colnames(design) <- c("C18", "normal")
 rm(cancerType)
 rm(filtered)
 rm(pD.all)

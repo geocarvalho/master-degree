@@ -8,7 +8,7 @@ library(data.table)
 sample <- "GSE51032"
 
 # Select idat
-idat_file <- paste("GSE51032/idat/normal_mama", sep="")
+idat_file <- "GSE51032/idat/normal_colon"
 
 # Open idat files as array
 rgSet <- read.metharray.exp(idat_file)
@@ -35,6 +35,12 @@ detP <- detP[match(featureNames(mSetSq),rownames(detP)),]
 ## remove any probes that have failed in one or more samples
 keep <- rowSums(detP < 0.01) == ncol(mSetSq)
 mSetSqFlt <- mSetSq[keep,]
+
+## remove probes on the sex cromosomes
+ann450k <- getAnnotation(IlluminaHumanMethylation450kanno.ilmn12.hg19)
+keep <- !(featureNames(mSetSqFlt) %in% ann450k$Name[ann450k$chr %in% c("chrX","chrY")])
+table(keep)
+mSetSqFlt <- mSetSqFlt[keep,]
 rm(mSetSq)
 rm(detP)
 gc()
@@ -51,7 +57,7 @@ mSetSqFlt <- mSetSqFlt[keep,]
 rm(keep)
 rm(xReactiveProbes)
 bVals <- getBeta(mSetSqFlt)
-# 394937    659
+# 385750    659
 bvalues <- paste(sample, "/", sample, "_bvalues.csv", sep="")
 write.csv(file=bvalues, x=bVals)
 rm(bVals)

@@ -17,7 +17,7 @@ load(mVals)
 
 
 # create a contrast matrix for specific comparisons
-contMatrix <- makeContrasts("C50-normal", levels=design)
+contMatrix <- makeContrasts("C18-normal", levels=design)
 
 # fit the contrasts
 fit2 <- contrasts.fit(fit, contMatrix)
