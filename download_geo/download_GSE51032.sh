@@ -6,3 +6,4 @@ wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE51nnn/GSE51032/suppl//GSE51032_R
 
 # Download matrix
 wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE51nnn/GSE51032/matrix/GSE51032_series_matrix.txt.gz
+gunzip GSE51032_series_matrix.txt.gz
