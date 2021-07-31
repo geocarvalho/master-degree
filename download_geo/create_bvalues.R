@@ -1,8 +1,8 @@
-library(minfi)
-library(GEOquery)
-library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
-library(IlluminaHumanMethylation450kmanifest)
-library(data.table)
+suppressMessages(library(minfi))
+suppressMessages(library(GEOquery))
+suppressMessages(library(IlluminaHumanMethylation450kanno.ilmn12.hg19))
+suppressMessages(library(IlluminaHumanMethylation450kmanifest))
+suppressMessages(library(data.table))
 
 # Sample
 sample <- "GSE51032"

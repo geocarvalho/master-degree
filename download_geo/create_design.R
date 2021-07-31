@@ -9,6 +9,7 @@ pD.all <- pData(geoMat)
 # Rename cancer type column
 names(pD.all)[names(pD.all) == "cancer type (icd-10):ch1"] <- "cancer_type"
 names(pD.all)[names(pD.all) == "gender:ch1"] <- "gender"
+names(pD.all)[names(pD.all) == "time to diagnosis:ch1"] <- "time_to_diagnosis"
 
 # Replace NA with normal in cancer type column
 pD.all["cancer_type"][is.na(pD.all["cancer_type"])] <- "normal"
@@ -18,6 +19,7 @@ filtered <- pD.all[pD.all$cancer_type %in% c("normal", "C50"), ]
 filtered <- filtered[filtered$gender %in% c("F"), ]
 
 # Create the desing matrix
+diagnosisTime <- factor(filtered$time_to_diagnosis)
 cancerType <- factor(filtered$cancer_type)
 design <- model.matrix(~cancerType -1)
 colnames(design) <- c("C50", "normal")
