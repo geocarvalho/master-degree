@@ -1,7 +1,7 @@
 import pandas as pd
 
-list_of_probes = "/home/watson/george/master-degree/download_geo/GSE51032/GSE51032_sigCpGs.csv"
-b_values = "/home/watson/george/master-degree/download_geo/GSE51032/GSE51032_bvalues.csv"
+list_of_probes = "../download_geo/GSE51032/GSE51032_sigCpGs.csv"
+b_values = "../download_geo/GSE51032/GSE51032_bvalues.csv"
 output = b_values.replace(".csv", "_filtered.csv")
 
 with open(list_of_probes, "r") as buffer:

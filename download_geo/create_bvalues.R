@@ -8,7 +8,7 @@ library(data.table)
 sample <- "GSE51032"
 
 # Select idat
-idat_file <- "GSE51032/idat/normal_colon"
+idat_file <- "GSE51032/idat/normal_mama"
 
 # Open idat files as array
 rgSet <- read.metharray.exp(idat_file)
@@ -37,10 +37,10 @@ keep <- rowSums(detP < 0.01) == ncol(mSetSq)
 mSetSqFlt <- mSetSq[keep,]
 
 ## remove probes on the sex cromosomes
-ann450k <- getAnnotation(IlluminaHumanMethylation450kanno.ilmn12.hg19)
-keep <- !(featureNames(mSetSqFlt) %in% ann450k$Name[ann450k$chr %in% c("chrX","chrY")])
-table(keep)
-mSetSqFlt <- mSetSqFlt[keep,]
+# ann450k <- getAnnotation(IlluminaHumanMethylation450kanno.ilmn12.hg19)
+# keep <- !(featureNames(mSetSqFlt) %in% ann450k$Name[ann450k$chr %in% c("chrX","chrY")])
+# table(keep)
+# mSetSqFlt <- mSetSqFlt[keep,]
 rm(mSetSq)
 rm(detP)
 gc()
