@@ -1,9 +1,11 @@
-library(minfi)
-library(GEOquery)
-library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
-library(IlluminaHumanMethylation450kmanifest)
-library(FlowSorted.Blood.450k)
-library(data.table)
+suppressPackageStartupMessages({
+    library(minfi)
+    library(GEOquery)
+    library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
+    library(IlluminaHumanMethylation450kmanifest)
+    library(FlowSorted.Blood.450k)
+    library(data.table)
+})
 
 # Sample
 sample <- "GSE51032"
@@ -32,5 +34,5 @@ cell_estimation <- estimateCellCounts(rgSet, compositeCellType = "Blood",
                                          "IlluminaHumanMethylation27k"),
                    returnAll = FALSE, meanPlot = FALSE, verbose = TRUE)
 
-cell_estimation_path <- paste(sample, "/", sample, "_bvalues.csv", sep="")
+cell_estimation_path <- paste(sample, "/", sample, "_cell_estimation.csv", sep="")
 write.csv(file=cell_estimation_path, x=cell_estimation)
