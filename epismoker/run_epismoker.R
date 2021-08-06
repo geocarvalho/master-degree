@@ -9,9 +9,10 @@ library(htmlTable)
 library(rmarkdown)
 })
 
-idatpath <- "/home/watson/george/master-degree/GSE109381/idat/major"
-rawdata <- loadData(idatPath = idatpath)
-samplesheet <- read.csv("/home/watson/george/master-degree/GSE109381/idat/major/samplesheet_GSE109381_simple.csv", header=TRUE, sep=",")
+# Careful with the path because it should be inside the docker image
+idatpath <- "./GSE51032/idat/normal_mama"
+rawdata <- loadData(idatpath)
+samplesheet <- read.csv("./GSE51032/idat/normal_mama/samplesheet_GSE109381_simple.csv", header=TRUE, sep=",")
 samplesheet2 <- samplesheet[,-1]
 rownames(samplesheet2) <- samplesheet[,1]
 # knitr::kable(head(samplesheet, 5)
@@ -41,4 +42,4 @@ result_SSt <- epismoker(dataset=dataset_QN, samplesheet = samplesheet2, method =
 # Compreshensive approach (all)
 # result_All <- epismoker(dataset_QN=dataset_QN, dataset_ILM=dataset_ILM, dataset_SQN=dataset_SQN, samplesheet = samplesheet, method = "all")
 
-write.csv(result_SSt, file = "/home/watson/george/master-degree/GSE109381/idat/major/epismoker_GSE109381.csv", row.names = FALSE)
+write.csv(result_SSt, file = "./GSE51032/epismoker_SSt_GSE109381.csv", row.names = FALSE)
