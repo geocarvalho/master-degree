@@ -9,7 +9,7 @@ direc = os.path.dirname(os.path.abspath(pheno))
 pheno_df["cancer type (icd-10):ch1"] = pheno_df["cancer type (icd-10):ch1"].replace(
     np.nan, "normal", regex=True)
 # Select females for breast cancer analysis
-# pheno_df = pheno_df[pheno_df["gender:ch1"]=="F"]
+pheno_df = pheno_df[pheno_df["gender:ch1"]=="F"]
 # pheno_df["cancer type (icd-10):ch1"].value_counts()
 pheno_df.to_csv(
     os.path.join(direc, "GSE51032_all_phenotype_normals.csv"), index=False)
