@@ -65,4 +65,7 @@ print("\nAge of menarche:")
 print(df_breast["age at menarche:ch1"].value_counts())
 
 # Select important columns
-output = df_breast[["title", "geo_access", "age at menarche:ch1", "time to diagnosis:ch1", "time_to_diagnosis", "age:ch1", "age"]]
+output = df_breast[["title", "geo_accession", "age at menarche:ch1", "time to diagnosis:ch1", "time_to_diagnosis", "age:ch1", "age", "cancer type (icd-10):ch1"]]
+output = output.rename(columns={"age at menarche:ch1": "age_at_menarche",
+    "cancer type (icd-10):ch1": "cancer_type"})
+output.to_csv("../download_geo/GSE51032/GSE51032_classes_design.csv", index=False)

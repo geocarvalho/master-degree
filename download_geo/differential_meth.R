@@ -1,10 +1,9 @@
-# library(minfi)
-library(limma)
-# library(GEOquery)
-library(missMethyl)
-library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
-# library(IlluminaHumanMethylation450kmanifest)
-library(data.table)
+suppressPackageStartupMessages({
+    library(limma)
+    library(missMethyl)
+    library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
+    library(data.table)
+})
 
 sample <- "GSE51032"
 
@@ -17,7 +16,8 @@ load(mVals)
 
 
 # create a contrast matrix for specific comparisons
-contMatrix <- makeContrasts("C50-normal", levels=design)
+# contMatrix <- makeContrasts("C50-normal", levels=design)
+contMatrix <- makeContrasts("cancer_type_C50", levels=design)
 
 # fit the contrasts
 fit2 <- contrasts.fit(fit, contMatrix)
