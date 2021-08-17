@@ -14,8 +14,8 @@ def calculate_classes_res(series):
     max = series.max()
     minus = max - min
     ## Always round up the result
-    # res = math.ceil(minus / c)
-    res = round(minus/c, 2)
+    res = math.ceil(minus / c)
+    # res = round(minus/c, 2)
     print("classes, threshold: ", c, res)
     return c, res
 
@@ -36,7 +36,6 @@ def col_classes(df, col):
     ## Number of data points
     classes, res = calculate_classes_res(df[col])
     ## Create new column with the classe
-    df[col] = df[col].round(2)
     df[new_col] = df.apply(lambda row: create_classes(row[col], df[col].min(), classes, res), axis=1)
     return df.copy()
 
@@ -44,6 +43,10 @@ dataset = "../data/GSE51032_all_phenotype.csv"
 pheno_df = pd.read_csv(dataset)
 cell_count_data = "GSE51032/GSE51032_cell_estimation.csv"
 cell_count_df = pd.read_csv(cell_count_data)
+
+# Replace negative values in cell count by 0
+cell_count_df["CD4T"] = np.where(cell_count_df["CD4T"] < 0.0, 0.0, cell_count_df["CD4T"])
+
 # Create sample_id
 cell_count_df = cell_count_df.rename(columns={"Unnamed: 0": "sample_id"})
 pheno_df["sample_id"] = pheno_df["geo_accession"] + "_" + pheno_df["title"]
@@ -61,6 +64,10 @@ result = pd.merge(df_breast, cell_count_df, on="sample_id", how="left")
 result = result.rename(columns={
     "age:ch1": "age", "time to diagnosis:ch1": "time_to_diagnosis",
     "age at menarche:ch1": "age_at_menarche", "cancer type (icd-10):ch1": "cancer_type"})
+
+# Change cell count to percentage
+for cell in ["CD8T", "CD4T", "NK", "Bcell", "Mono", "Gran"]:
+  result[cell] = result[cell] * 100
 
 # Create classes for the columns
 cols = ["age", "time_to_diagnosis", "CD8T", "CD4T", "NK", "Bcell", "Mono", "Gran"]
