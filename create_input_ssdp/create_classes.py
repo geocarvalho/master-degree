@@ -43,6 +43,9 @@ dataset = "../data/GSE51032_all_phenotype.csv"
 pheno_df = pd.read_csv(dataset)
 cell_count_data = "GSE51032/GSE51032_cell_estimation.csv"
 cell_count_df = pd.read_csv(cell_count_data)
+epismoker = "GSE51032/epismoker_SSt_GSE109381.csv"
+epismoker_df = pd.read_csv(epismoker)
+
 
 # Replace negative values in cell count by 0
 cell_count_df["CD4T"] = np.where(cell_count_df["CD4T"] < 0.0, 0.0, cell_count_df["CD4T"])
@@ -59,6 +62,7 @@ df_breast = df_breast[df_breast["gender:ch1"]=="F"]
 
 # Merge df_breast and cell_count_df
 result = pd.merge(df_breast, cell_count_df, on="sample_id", how="left")
+result = pd.merge(result, epismoker_df, left_on="sample_id", right_on="SampleName", how="left")
 
 # Rename columns
 result = result.rename(columns={
@@ -83,5 +87,5 @@ result["age_at_menarche_int"] = result["age_at_menarche"].astype(int)
 output = result[[
     "sample_id", "age_at_menarche_int", "time_to_diagnosis", "time_to_diagnosis_classes", "age", "age_classes",
     "CD8T", "CD8T_classes", "CD4T", "CD4T_classes", "NK", "NK_classes", "Bcell", "Bcell_classes", "Mono", "Mono_classes",
-    "Gran", "Gran_classes", "cancer_type", ]]
+    "Gran", "Gran_classes", "cancer_type", "PredictedSmokingStatus"]]
 output.to_csv("../download_geo/GSE51032/GSE51032_classes_design.csv", index=False)
