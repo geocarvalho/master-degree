@@ -21,6 +21,9 @@ tar -xvf GSE72251_outputs.tar.gz
 
 * O download dos dados foi feito de acordo com o notion, se necessario e possivel usar o PyMethyl para isso. Ele pareceu bem mais facil de lidar
 
+* Labbe token
+`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`
+
 ## Usando pymethyl
 
 ```
