@@ -59,9 +59,10 @@ cols = df.columns.tolist()
 series_lst = []
 with concurrent.futures.ProcessPoolExecutor() as executer:
     results = [executer.submit(col_classes, df[col]) for col in cols]
+    print("All the process were sent")
     for f in concurrent.futures.as_completed(results):
         series_lst.append(f.result())
-
+print("Process' results done.")
 new_df = pd.concat(series_lst, axis=1)
 # new_df = new_df.T
 # merge with phenotipes
