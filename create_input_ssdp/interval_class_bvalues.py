@@ -36,11 +36,20 @@ def col_classes(series):
     ## Number of data points
     classes, res = calculate_classes_res(series)
     ## Create new column with the classe
-    new_series = series.apply(lambda row: create_classes(row, minimal, classes, res), axis=1)
+    new_series = series.apply(lambda row: create_classes(row, minimal, classes, res))
     return new_series
 
 data = "./GSE51032/GSE51032_bvalues_filtered_cn.csv"
+pheno = "./GSE51032/GSE51032_classes_design.csv"
 output = data.replace(".csv", "_pheno.csv")
+pheno_df = pd.read_csv(pheno)
+pheno_df_filtered = pheno_df[[
+    "sample_id", "age_at_menarche_int", "time_to_diagnosis_classes", "age_classes", "CD8T_classes",
+    "CD8T_classes", "NK_classes", "Bcell_classes", "Mono_classes", "Gran_classes", "PredictedSmokingStatus",
+    "cancer_type"]]
+pheno_df_filtered.set_index("sample_id", inplace=True)
+pheno_df_filtered = pheno_df_filtered.rename(columns={"cancer_type": "target"})
+pheno_df_filtered["target"].replace({"normal": "0", "C50": "1"}, inplace=True) 
 df = pd.read_csv(data)
 df.set_index("probes", inplace=True)
 df = df.astype(float)
@@ -53,3 +62,7 @@ with concurrent.futures.ProcessPoolExecutor() as executer:
         series_lst.append(f.result())
 
 new_df = pd.concat(series_lst, axis=1)
+new_df = new_df.T
+# merge with phenotipes
+merge = pd.concat([new_df, pheno_df_filtered], axis=1)
+merge.to_csv(output)
