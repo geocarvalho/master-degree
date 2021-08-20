@@ -12,7 +12,7 @@ def calculate_classes_res(series):
             break
     # Calculate the threshold
     min = series.min()
-    max = series.max()
+    max = series.max()     
     minus = max - min
     ## Always round up the result
     # res = math.ceil(minus / c)
@@ -39,8 +39,8 @@ def col_classes(series):
     new_series = series.apply(lambda row: create_classes(row, minimal, classes, res))
     return new_series
 
-data = "./GSE51032/GSE51032_bvalues_filtered_cn.csv"
-pheno = "./GSE51032/GSE51032_classes_design.csv"
+data = "../download_geo/GSE51032/GSE51032_bvalues_filtered_cn.csv"
+pheno = "../download_geo/GSE51032/GSE51032_classes_design.csv"
 output = data.replace(".csv", "_pheno.csv")
 pheno_df = pd.read_csv(pheno)
 pheno_df_filtered = pheno_df[[
@@ -49,10 +49,11 @@ pheno_df_filtered = pheno_df[[
     "cancer_type"]]
 pheno_df_filtered.set_index("sample_id", inplace=True)
 pheno_df_filtered = pheno_df_filtered.rename(columns={"cancer_type": "target"})
-pheno_df_filtered["target"].replace({"normal": "0", "C50": "1"}, inplace=True) 
+pheno_df_filtered["target"] = pheno_df_filtered["target"].map({"normal": "0", "C50": "1"}) 
 df = pd.read_csv(data)
 df.set_index("probes", inplace=True)
 df = df.astype(float)
+df = df.T
 
 cols = df.columns.tolist()
 series_lst = []
@@ -62,7 +63,7 @@ with concurrent.futures.ProcessPoolExecutor() as executer:
         series_lst.append(f.result())
 
 new_df = pd.concat(series_lst, axis=1)
-new_df = new_df.T
+# new_df = new_df.T
 # merge with phenotipes
 merge = pd.concat([new_df, pheno_df_filtered], axis=1)
 merge.to_csv(output)
