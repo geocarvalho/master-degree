@@ -46,3 +46,6 @@ download_geo/preprocessCore/config*
 download_geo/preprocessCore/src/*
 download_geo/*.Rda
 download_geo/preprocessCore
+
+# Jupyter
+.ipynb_checkpoints/

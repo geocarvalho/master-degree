@@ -13,9 +13,9 @@ task = ps.SubgroupDiscoveryTask (
     df, 
     target, 
     searchspace, 
-    result_set_size=20, 
-    depth=50, 
+    result_set_size=40, 
+    depth=100, 
     qf=ps.WRAccQF())
 result = ps.BeamSearch().execute(task)
 result_df = result.to_dataframe()
-result_df.to_csv("../download_geo/GSE51032/GSE51032_beamsearch_result_dp50_sz20_nodiagnosis.csv", index=False)
+result_df.to_csv("../download_geo/GSE51032/GSE51032_beamsearch_result_dp100_sz40_nodiagnosis.csv", index=False)
