@@ -61,7 +61,7 @@ pheno_df = pd.read_csv(pheno)
 pheno_df_filtered = pheno_df[[
     "sample_id", "age_at_menarche_int", "time_to_diagnosis_classes", "age_classes", "CD8T_classes",
     "CD4T_classes", "NK_classes", "Bcell_classes", "Mono_classes", "Gran_classes", "PredictedSmokingStatus",
-    "cancer_type"]]
+    "mAge_Hannum_classes", "mAge_Hovath_classes", "PhenoAge_classes", "cancer_type"]]
 pheno_df_filtered.set_index("sample_id", inplace=True)
 pheno_df_filtered = pheno_df_filtered.rename(columns={"cancer_type": "target"})
 pheno_df_filtered["target"] = pheno_df_filtered["target"].map({"normal": "0", "C50": "1"}) 

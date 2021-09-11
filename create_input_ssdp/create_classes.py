@@ -45,6 +45,8 @@ cell_count_data = "GSE51032/GSE51032_cell_estimation.csv"
 cell_count_df = pd.read_csv(cell_count_data)
 epismoker = "GSE51032/epismoker_SSt_GSE109381.csv"
 epismoker_df = pd.read_csv(epismoker)
+age = "GSE51032/age_prediction_GSE109381.csv"
+age_df = pd.read_csv(age)
 
 
 # Replace negative values in cell count by 0
@@ -63,6 +65,7 @@ df_breast = df_breast[df_breast["gender:ch1"]=="F"]
 # Merge df_breast and cell_count_df
 result = pd.merge(df_breast, cell_count_df, on="sample_id", how="left")
 result = pd.merge(result, epismoker_df, left_on="sample_id", right_on="SampleName", how="left")
+result = pd.merge(result, age_df, left_on="sample_id", right_on="SampleID", how="left")
 
 # Rename columns
 result = result.rename(columns={
@@ -74,7 +77,7 @@ for cell in ["CD8T", "CD4T", "NK", "Bcell", "Mono", "Gran"]:
   result[cell] = result[cell] * 100
 
 # Create classes for the columns
-cols = ["age", "time_to_diagnosis", "CD8T", "CD4T", "NK", "Bcell", "Mono", "Gran"]
+cols = ["age", "time_to_diagnosis", "CD8T", "CD4T", "NK", "Bcell", "Mono", "Gran", "mAge_Hovath", "mAge_Hannum", "PhenoAge"]
 for col in cols:
     result = col_classes(result, col)
 
@@ -87,5 +90,6 @@ result["age_at_menarche_int"] = result["age_at_menarche"].astype(int)
 output = result[[
     "sample_id", "age_at_menarche_int", "time_to_diagnosis", "time_to_diagnosis_classes", "age", "age_classes",
     "CD8T", "CD8T_classes", "CD4T", "CD4T_classes", "NK", "NK_classes", "Bcell", "Bcell_classes", "Mono", "Mono_classes",
-    "Gran", "Gran_classes", "cancer_type", "PredictedSmokingStatus"]]
+    "Gran", "Gran_classes", "cancer_type", "PredictedSmokingStatus", "mAge_Hovath_classes", "mAge_Hannum_classes",
+    "PhenoAge_classes"]]
 output.to_csv("../download_geo/GSE51032/GSE51032_classes_design.csv", index=False)
