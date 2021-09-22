@@ -54,7 +54,7 @@ def factorize_df(df):
         new_df["target"] = df["target"].copy()
     return new_df
 
-data = "../download_geo/GSE51032/GSE51032_bvalues_filtered_cn.csv"
+data = "../download_geo/GSE51032/GSE51032_bvalues_filtered.csv"
 pheno = "../download_geo/GSE51032/GSE51032_classes_design.csv"
 output = data.replace(".csv", "_pheno.csv")
 pheno_df = pd.read_csv(pheno)
