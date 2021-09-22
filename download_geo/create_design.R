@@ -19,20 +19,20 @@ library(GEOquery)
 # filtered <- filtered[filtered$gender %in% c("F"), ]
 
 # Read csv classes design
-filtered <- read.csv("../download_geo/GSE51032//GSE51032_classes_design.csv")
+filtered <- read.csv("../download_geo/GSE51032/GSE51032_classes_design.csv")
 
 # Create the desing matrix
-# diagnosisTime <- factor(filtered$time_to_diagnosis)
+diagnosisTime <- factor(filtered$time_to_diagnosis_classes)
 cancerType <- factor(filtered$cancer_type)
-# design <- model.matrix(~cancerType + diagnosisTime)
-design <- model.matrix(~0+ cancerType)
+design <- model.matrix(~0 + cancerType + diagnosisTime, data=filtered)
+# design <- model.matrix(~0+ cancerType)
 # colnames(design) <- c("C50", "normal")
-# colnames(design) <- c("cancert_type_C50", "cancert_type_normal", "diagnosisTime>=0.04,<2.04", 
+# colnames(design) <- c("cancer_type_C50", "cancer_type_normal", "diagnosisTime>=0.04,<2.04", 
 # "diagnosisTime>=10.04,<12.04", "diagnosisTime>=12.04,<14.04" "diagnosisTime>=14.04,<16.04", 
 # "diagnosisTime>=2.04,<4.04", "diagnosisTime>=4.04,<6.04", "diagnosisTime>=6.04,<8.04", 
 # "diagnosisTime>=8.04,<10.04")
 
-# colnames(design) <- c("cancert_type_C50", "cancert_type_normal", "diagnosisTime_1", "diagnosisTime_6", "diagnosisTime_7", "diagnosisTime_8", "diagnosisTime_2", "diagnosisTime_3", "diagnosisTime_4", "diagnosisTime_5")
+colnames(design) <- c("cancer_type_C50", "cancer_type_normal", "diagnosisTime_1", "diagnosisTime_6", "diagnosisTime_7", "diagnosisTime_8", "diagnosisTime_2", "diagnosisTime_3", "diagnosisTime_4", "diagnosisTime_5")
 
 rm(cancerType)
 rm(filtered)

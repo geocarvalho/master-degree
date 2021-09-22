@@ -90,6 +90,6 @@ result["age_at_menarche_int"] = result["age_at_menarche"].astype(int)
 output = result[[
     "sample_id", "age_at_menarche_int", "time_to_diagnosis", "time_to_diagnosis_classes", "age", "age_classes",
     "CD8T", "CD8T_classes", "CD4T", "CD4T_classes", "NK", "NK_classes", "Bcell", "Bcell_classes", "Mono", "Mono_classes",
-    "Gran", "Gran_classes", "cancer_type", "PredictedSmokingStatus", "mAge_Hovath_classes", "mAge_Hannum_classes",
-    "PhenoAge_classes"]]
+    "Gran", "Gran_classes", "cancer_type", "PredictedSmokingStatus", "mAge_Hovath", "mAge_Hannum", "PhenoAge", 
+    "mAge_Hovath_classes", "mAge_Hannum_classes", "PhenoAge_classes"]]
 output.to_csv("../download_geo/GSE51032/GSE51032_classes_design.csv", index=False)
