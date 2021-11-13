@@ -115,7 +115,7 @@ fit <- lmFit(mVals, design)
 ## Differential meth
 # create a contrast matrix for specific comparisons
 # contMatrix <- makeContrasts("C50-normal", levels=design)
-contMatrix <- makeContrasts(cancer_type_C50-cancer_type_normal, levels=design)
+contMatrix <- makeContrasts("cancerTypeC50-cancerTypenormal", levels=design)
 
 # fit the contrasts
 fit2 <- contrasts.fit(fit, contMatrix)
@@ -135,7 +135,7 @@ DMPs_out <- paste(sample, "/", sample, "_DMPs.csv", sep="")
 write.table(DMPs, file=DMPs_out, sep=",", row.names=FALSE)
 
 # Get the significant CpG sites at less than 5% FDR
-sigCpGs <- DMPs$Name[DMPs$adj.P.Val<0.05] 14088
+sigCpGs <- DMPs$Name[DMPs$adj.P.Val<0.05] #14088
 # length(sigCpGs) 152894
 # Write a txt file with the significant CpGs
 sig_out <- paste(sample, "/", sample, "_sigCpGs.csv", sep="")
@@ -166,15 +166,28 @@ close(fileConn)
 # subgroup7 <- c('cg15515265', 'cg25045746', 'cg05300996', 'cg17469292', 'cg26695837', 'cg20300129', 'cg23634318', 'cg13314057', 'cg18591136', 'cg17751435', 'cg27459530', 'cg08138366', 'cg21033655')
 # subgroup8 <- c('cg26029682', 'cg07712892', 'cg21906728', 'cg23634318', 'cg21961890', 'cg13831540', 'cg17509872', 'ch.9.2042397F', 'cg26846726')
 # subgroup9 <- c('cg00542041', 'cg24302688', 'cg26029682', 'cg10318121', 'cg15637234', 'cg15131808', 'cg10166888', 'cg01103590', 'cg20601096', 'cg01633184', 'cg08138366', 'cg15593721')
-subgroup <- c('cg00542041', 'cg09470905', 'cg24596729', 'cg15637234', 'cg20822448', 'cg16090392', 'cg12722569', 'cg13831540', 'cg20705358', 'ch.9.2042397F', 'cg17751435', 'cg19693626', 'cg15859496', 'cg12404465', 'cg12090003', 'cg15593721')
+# subgroup <- c('cg00542041', 'cg09470905', 'cg24596729', 'cg15637234', 'cg20822448', 'cg16090392', 'cg12722569', 'cg13831540', 'cg20705358', 'ch.9.2042397F', 'cg17751435', 'cg19693626', 'cg15859496', 'cg12404465', 'cg12090003', 'cg15593721')
+
+# beam search 2 - first one is the common
+# subgroup <- c('cg17934367', 'cg26885578', 'cg18497550', 'cg01745873', 'cg06529439', 'cg10456069', 'cg15730116', 'cg07704144', 'cg10587741', 'cg01096478', 'cg07003587', 'cg13554071', 'cg07063325', 'cg25117123', 'cg26045220', 'cg07839336', 'cg20694619', 'cg19456996==3 & cg02964474', 'cg26680520', 'cg22466771', 'cg00126034', 'cg00847892', 'cg02105261', 'cg07782002', 'cg02582925', 'cg22106401', 'cg09909351', 'cg04420932', 'cg05667817', 'cg12597983', 'cg11422861', 'cg10474712')
+# subgroup <- c('cg00126034', 'cg00577361', 'cg00847892', 'cg01096478', 'cg01745873', 'cg02105261', 'cg02582925', 'cg02964474', 'cg04420932', 'cg05667817', 'cg06529439', 'cg07003587', 'cg07063325', 'cg07704144', 'cg07782002', 'cg07839336', 'cg09909351', 'cg10456069', 'cg10474712', 'cg10587741', 'cg11422861', 'cg12597983', 'cg13554071', 'cg15730116', 'cg17934367', 'cg18497550', 'cg19456996', 'cg20694619', 'cg22106401', 'cg22466771', 'cg25117123', 'cg26045220', 'cg26680520', 'cg26885578')
+# subgroup <- c('cg00126034', 'cg00847892', 'cg01096478', 'cg01745873', 'cg02068989', 'cg02105261', 'cg02582925', 'cg02964474', 'cg04420932', 'cg05667817', 'cg06529439', 'cg07003587', 'cg07063325', 'cg07704144', 'cg07782002', 'cg07839336', 'cg09909351', 'cg10456069', 'cg10474712', 'cg10587741', 'cg11422861', 'cg12597983', 'cg13554071', 'cg15730116', 'cg17934367', 'cg18497550', 'cg19456996', 'cg20694619', 'cg22106401', 'cg22466771', 'cg25117123', 'cg26045220', 'cg26680520', 'cg26885578')
+subgroup <- c('cg00126034', 'cg00776782', 'cg00847892', 'cg01096478', 'cg01745873', 'cg02105261', 'cg02582925', 'cg02964474', 'cg04420932', 'cg05667817', 'cg06529439', 'cg07003587', 'cg07063325', 'cg07704144', 'cg07782002', 'cg07839336', 'cg09909351', 'cg10456069', 'cg10474712', 'cg10587741', 'cg11422861', 'cg12597983', 'cg13554071', 'cg15730116', 'cg17934367', 'cg18497550', 'cg19456996', 'cg20694619', 'cg22106401', 'cg22466771', 'cg25117123', 'cg26045220', 'cg26680520', 'cg26885578')
+
+# ssdp 2
+# subgroup <- c('cg10892587', 'cg00396625', 'cg18581221', 'cg25117123', 'cg13711457', 'cg26457665', 'cg27249304', 'cg16821694', 'cg05667817', 'cg12666166', 'cg09889850', 'cg10024437', 'cg12384499', 'cg02105261', 'cg18497550', 'cg10590400', 'cg25814383', 'cg21775899', 'cg06080893', 'cg11422861')
+# subgroup <- c('cg10892587', 'cg13711457', 'cg25503086', 'cg26457665', 'cg16068620', 'cg08303612', 'cg17200920', 'cg09500200', 'cg27249304', 'cg05667817', 'cg09934894', 'cg10024437', 'cg16228087', 'cg00106744', 'cg05339472')
+# subgroup <- c('cg10892587', 'cg06529439', 'cg25117123', 'cg26457665', 'cg19456996', 'cg17200920', 'cg09909351', 'cg27249304', 'cg18497550', 'cg21775899', 'cg11422861')
+# subgroup <- c('cg19844724', 'cg06918887', 'cg22466620', 'cg08303612', 'cg05184917', 'cg10590400', 'cg21775899')
+# subgroup <- c('cg26521784', 'cg06529439', 'cg06918887', 'cg09909351', 'cg17270843', 'cg07899956')
 
 kte <- topGSA(gometh(sig.cpg=subgroup, all.cpg=sigCpGs, plot.bias=FALSE, collection='KEGG'), number=10)
 gte <- topGSA(gometh(sig.cpg=subgroup, all.cpg=sigCpGs, plot.bias=FALSE), number=10)
 
-kte_out <- paste(sample, "/subgroups_anno/", sample, "_kte_ssdpsg10.csv", sep="")
+kte_out <- paste(sample, "/filtered_results/sg_anno/", sample, "_bs3_kte.csv", sep="")
 write.table(kte, file=kte_out, sep=",", row.names=TRUE)
-
-gte_out <- paste(sample, "/subgroups_anno/", sample, "_gte_ssdpsg10.csv", sep="")
+# subgroups_anno filtered_results
+gte_out <- paste(sample, "/filtered_results/sg_anno/", sample, "_bs3_gte.csv", sep="")
 write.table(gte, file=gte_out, sep=",", row.names=TRUE)
 
 
