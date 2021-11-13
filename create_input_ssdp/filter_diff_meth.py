@@ -1,8 +1,8 @@
 import pandas as pd
 
-list_of_probes = "./GSE51032/GSE51032_sigCpGs.csv"
+list_of_probes = "./GSE51032/GSE51032_sigCpGs_cn.csv"
 b_values = "./GSE51032/GSE51032_bvalues.csv"
-output = b_values.replace(".csv", "_filtered.csv")
+output = b_values.replace(".csv", "_filtered_cn.csv")
 
 with open(list_of_probes, "r") as buffer:
     probes_list = [probe.strip("\n") for probe in buffer.readlines()]
